@@ -1,0 +1,40 @@
+@model DemoMVC.Models.Student
+
+<h2>Nhập thông tin sinh viên</h2>
+
+<form asp-controller="Student"
+      asp-action="Create"
+      method="post">
+
+    <div>
+        <label>Họ tên:</label>
+
+        <input asp-for="FullName"
+               type="text" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Địa chỉ:</label>
+
+        <input asp-for="Address"
+               type="text" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Trường đại học:</label>
+
+        <input asp-for="University"
+               type="text" />
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Gửi thông tin
+    </button>
+
+</form>

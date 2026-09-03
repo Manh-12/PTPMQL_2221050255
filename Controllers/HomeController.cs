@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using DemoMVC.Models;
+using DemoMvc.Models; // Đổi từ DemoMVC thành DemoMvc
 
-namespace DemoMVC.Controllers;
+namespace DemoMvc.Controllers; // Đổi từ DemoMVC thành DemoMvc
 
 public class HomeController : Controller
 {

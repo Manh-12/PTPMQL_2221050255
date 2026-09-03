@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ptien\\OneDrive\\Đính kèm\\PTPMQL_2221050255\\DemoMVC\\DemoMVC.csproj",
+      "projectUniqueName": "C:\\PTPMQL_2221050255\\DemoMVC\\DemoMVC.csproj",
       "projectName": "DemoMVC",
-      "projectPath": "C:\\Users\\ptien\\OneDrive\\Đính kèm\\PTPMQL_2221050255\\DemoMVC\\DemoMVC.csproj",
+      "projectPath": "C:\\PTPMQL_2221050255\\DemoMVC\\DemoMVC.csproj",
       "packagesPath": "C:\\Users\\ptien\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ptien\\OneDrive\\Đính kèm\\PTPMQL_2221050255\\DemoMVC\\obj\\",
+      "outputPath": "C:\\PTPMQL_2221050255\\DemoMVC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ptien\\AppData\\Roaming\\NuGet\\NuGet.Config"

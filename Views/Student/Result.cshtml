@@ -1,0 +1,29 @@
+@model DemoMVC.Models.Student
+
+<h2>Thông tin sinh viên</h2>
+
+<table border="1" cellpadding="10">
+
+    <tr>
+        <th>Họ tên</th>
+        <td>@Model.FullName</td>
+    </tr>
+
+    <tr>
+        <th>Địa chỉ</th>
+        <td>@Model.Address</td>
+    </tr>
+
+    <tr>
+        <th>Trường đại học</th>
+        <td>@Model.University</td>
+    </tr>
+
+</table>
+
+<br />
+
+<a asp-controller="Student"
+   asp-action="Create">
+    Nhập lại
+</a>

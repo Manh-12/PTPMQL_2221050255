@@ -1,4 +1,4 @@
-namespace DemoMVC.Models;
+namespace DemoMvc.Models; // Đảm bảo ghi đúng chữ namespace có chữ n ở đầu
 
 public class ErrorViewModel
 {
