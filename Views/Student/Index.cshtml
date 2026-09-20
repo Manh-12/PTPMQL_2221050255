@@ -1,0 +1,38 @@
+@model IEnumerable<PTPMQL_MVC.Models.Student>
+
+<h1>@ViewBag.Message</h1>
+
+<p>
+    <a asp-controller="Student" asp-action="Create">
+        Nhập thông tin sinh viên
+    </a>
+</p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: left; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>Họ tên</th>
+            <th>Địa chỉ</th>
+            <th>Trường đại học</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="3" style="text-align: center; color: gray;">Chưa có sinh viên nào.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.Address</td>
+                    <td>@item.University</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
