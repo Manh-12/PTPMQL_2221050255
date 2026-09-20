@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using DemoMVC.Models;
+using PTPMQL_MVC.Models;
 
-namespace DemoMVC.Controllers
+namespace PTPMQL_MVC.Controllers
 {
     public class StudentController : Controller
     {
