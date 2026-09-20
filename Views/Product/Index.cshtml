@@ -1,66 +1,59 @@
-@model PTPMQL_MVC.Models.Product
+@model IEnumerable<PTPMQL_MVC.Models.Product>
 
-<h1>@ViewBag.PageTitle</h1>
+@{
+    ViewData["Title"] = "Danh mục thiết bị điện";
+}
 
-<p>
-    @ViewBag.WelcomeMessage
-</p>
-
-<hr />
-
-<h2>Thông tin cửa hàng</h2>
-
-<p>
-    Tên cửa hàng: @ViewData["StoreName"]
-</p>
-
-<p>
-    @ViewData["Contact"]
-</p>
-
-<hr />
-
-<h2>Thông tin sản phẩm</h2>
-
-<p>
-    Tên sản phẩm: @Model.Name
-</p>
-
-<p>
-    Giá: @Model.Price.ToString("N0") VNĐ
-</p>
-
-<p>
-    Loại sản phẩm: @Model.Category
-</p>
-
-<hr />
-
-<h2>Thêm sản phẩm</h2>
-
-<form asp-controller="Product" asp-action="Add" method="post">
-
-    <label>Tên sản phẩm:</label>
-    <input type="text" name="name" class="form-control" placeholder="Nhập tên sản phẩm..." required />
-
-    <br /><br />
-
-    <button type="submit" class="btn btn-primary">
-        Thêm sản phẩm
-    </button>
-
-</form>
-
-<hr />
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success" style="color: green; font-weight: bold;">
-        @TempData["SuccessMessage"]
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>@ViewBag.PageTitle</h1>
+        <a asp-action="Create" class="btn btn-primary">Thêm sản phẩm mới</a>
     </div>
 
-    <p>
-        Sản phẩm vừa thêm:
-        <strong>@TempData["AddedProduct"]</strong>
-    </p>
-}
+    <h3>@ViewBag.WelcomeMessage</h3>
+    <p class="text-muted">Cửa hàng: @ViewData["StoreName"] | @ViewData["Contact"]</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá bán</th>
+                <th>Danh mục</th>
+                <th>Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Chưa có sản phẩm nào trong hệ thống.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td class="fw-bold">@item.Name</td>
+                        <td>@item.Price.ToString("N0") VNĐ</td>
+                        <td>@item.Category</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Chi tiết</a> | 
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a> | 
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

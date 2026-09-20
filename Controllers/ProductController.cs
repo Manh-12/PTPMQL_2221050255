@@ -1,49 +1,92 @@
 using Microsoft.AspNetCore.Mvc;
-using PTPMQL_MVC.Models; // Đồng bộ với tên dự án thực tế
+using Microsoft.EntityFrameworkCore;
+using PTPMQL_MVC.Data;
+using PTPMQL_MVC.Models;
 
 namespace PTPMQL_MVC.Controllers
 {
     public class ProductController : Controller
     {
-        // Sử dụng một biến static để lưu thông tin sản phẩm tạm thời trên RAM
-        private static Product _currentProduct = new Product
+        private readonly ApplicationDbContext _context;
+
+        public ProductController(ApplicationDbContext context)
         {
-            Name = "Ổ cắm điện Panasonic",
-            Price = 150000,
-            Category = "Thiết bị điện"
-        };
-
-        // GET: Product
-        public IActionResult Index()
-        {
-            // Cấu hình dữ liệu truyền qua ViewBag và ViewData
-            ViewBag.PageTitle = "Danh mục thiết bị điện";
-            ViewBag.WelcomeMessage = "Chào mừng bạn đến với cửa hàng thiết bị điện";
-
-            ViewData["StoreName"] = "Điện Việt Store";
-            ViewData["Contact"] = "Hotline: 0917 333 000";
-
-            // Truyền đối tượng sản phẩm hiện tại sang giao diện hiển thị
-            return View(_currentProduct);
+            _context = context;
         }
 
-        // POST: Product/Add
-        [HttpPost]
-        public IActionResult Add(string name)
+        public async Task<IActionResult> Index()
         {
-            if (!string.IsNullOrEmpty(name))
+            var products = await _context.Products.ToListAsync();
+            return View(products);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Product product)
+        {
+            if (ModelState.IsValid)
             {
-                // Cập nhật lại tên sản phẩm hiển thị trên màn hình
-                _currentProduct.Name = name;
-                _currentProduct.Price = 0; // Giá mặc định cho sản phẩm mới thêm nhanh
-                _currentProduct.Category = "Thiết bị điện";
-
-                // Sử dụng TempData lưu trạng thái thông báo
-                TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
-                TempData["AddedProduct"] = name;
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+            return View(product);
+        }
 
-            return RedirectToAction("Index");
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Product product)
+        {
+            if (id != product.Id) return NotFound();
+            if (ModelState.IsValid)
+            {
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(product);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
