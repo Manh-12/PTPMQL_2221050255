@@ -1,0 +1,66 @@
+@model PTPMQL_MVC.Models.Product
+
+<h1>@ViewBag.PageTitle</h1>
+
+<p>
+    @ViewBag.WelcomeMessage
+</p>
+
+<hr />
+
+<h2>Thông tin cửa hàng</h2>
+
+<p>
+    Tên cửa hàng: @ViewData["StoreName"]
+</p>
+
+<p>
+    @ViewData["Contact"]
+</p>
+
+<hr />
+
+<h2>Thông tin sản phẩm</h2>
+
+<p>
+    Tên sản phẩm: @Model.Name
+</p>
+
+<p>
+    Giá: @Model.Price.ToString("N0") VNĐ
+</p>
+
+<p>
+    Loại sản phẩm: @Model.Category
+</p>
+
+<hr />
+
+<h2>Thêm sản phẩm</h2>
+
+<form asp-controller="Product" asp-action="Add" method="post">
+
+    <label>Tên sản phẩm:</label>
+    <input type="text" name="name" class="form-control" placeholder="Nhập tên sản phẩm..." required />
+
+    <br /><br />
+
+    <button type="submit" class="btn btn-primary">
+        Thêm sản phẩm
+    </button>
+
+</form>
+
+<hr />
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" style="color: green; font-weight: bold;">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <p>
+        Sản phẩm vừa thêm:
+        <strong>@TempData["AddedProduct"]</strong>
+    </p>
+}
