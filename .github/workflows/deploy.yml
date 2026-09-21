@@ -1,5 +1,3 @@
-name: Deploy ASP.NET Core MVC
-
 name: Deploy .NET 10 MVC to MonsterASP.net
 
 on:
@@ -25,13 +23,13 @@ jobs:
       - name: Publish project
         run: dotnet publish **/*.csproj -c Release -o ./publish
 
-      # 3. TẮT SERVER: Tạo và upload app_offline.htm bằng curl (Không làm hỏng file sync state)
+      # 3. TẮT SERVER: Tạo và upload app_offline.htm bằng curl
       - name: ⛔ Stop Server (Upload app_offline.htm)
         run: |
           echo "<html><body><h1>Updating...</h1></body></html>" > app_offline.htm
           curl -s --ftp-pasv -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/wwwroot/app_offline.htm"
 
-      # 4. DEPLOY CODE: Chỉ gọi FTP Action 1 lần duy nhất ở đây
+      # 4. DEPLOY CODE: Đã sửa lỗi cú pháp truyền biến sai và ẩn thông tin mật khẩu
       - name: 🚀 Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -46,7 +44,7 @@ jobs:
           exclude: |
             **/app_offline.htm
 
-      # 5. BẬT SERVER: Xóa file app_offline.htm bằng curl
+      # 5. BẬT SERVER: Xóa file app_offline.htm bằng curl (Luôn chạy kể cả khi deploy lỗi)
       - name: ▶️ Start Server (Delete app_offline.htm)
         if: always()
         run: |
