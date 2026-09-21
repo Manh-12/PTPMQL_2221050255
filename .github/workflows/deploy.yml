@@ -19,9 +19,16 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      # 2. Đóng gói ứng dụng
+      # 2. Đóng gói ứng dụng (Đã sửa lỗi tự động tìm file .csproj bất kể vị trí thư mục)
       - name: Publish project
-        run: dotnet publish **/*.csproj -c Release -o ./publish
+        run: |
+          PROJECT_FILE=$(find . -name "*.csproj" | head -n 1)
+          if [ -z "$PROJECT_FILE" ]; then
+            echo "❌ LỖI: Không tìm thấy bất kỳ file .csproj nào trong repo!"
+            exit 1
+          fi
+          echo "🚀 Tìm thấy file dự án tại: $PROJECT_FILE"
+          dotnet publish "$PROJECT_FILE" -c Release -o ./publish
 
       # 3. TẮT SERVER: Tạo và upload app_offline.htm bằng curl
       - name: ⛔ Stop Server (Upload app_offline.htm)
@@ -29,7 +36,7 @@ jobs:
           echo "<html><body><h1>Updating...</h1></body></html>" > app_offline.htm
           curl -s --ftp-pasv -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/wwwroot/app_offline.htm"
 
-      # 4. DEPLOY CODE: Đã sửa lỗi cú pháp truyền biến sai và ẩn thông tin mật khẩu
+      # 4. DEPLOY CODE
       - name: 🚀 Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
