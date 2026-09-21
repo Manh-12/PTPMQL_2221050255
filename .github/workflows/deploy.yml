@@ -10,17 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Bước 1: Lấy mã nguồn từ kho lưu trữ GitHub xuống máy ảo Linux
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Bước 2: Cài đặt môi trường .NET 10 SDK để có thể biên dịch code
+      # 1. Cài đặt .NET 10 SDK
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      # Bước 3: Tự động tìm kiếm file dự án (.csproj) và đóng gói (Publish) ứng dụng sang thư mục ./publish
+      # 2. Đóng gói ứng dụng sang thư mục publish
       - name: Publish project
         run: |
           PROJECT_FILE=$(find . -name "*.csproj" | head -n 1)
@@ -31,7 +30,7 @@ jobs:
           echo "🚀 Tìm thấy file dự án tại: $PROJECT_FILE"
           dotnet publish "$PROJECT_FILE" -c Release -o ./publish
 
-      # Bước 4: Kết nối FTP và đẩy toàn bộ file đã đóng gói từ thư mục ./publish lên thư mục /wwwroot/ của hosting
+      # 3. Deploy code sử dụng thông tin từ Secrets đã nạp đầy đủ
       - name: 🚀 Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
