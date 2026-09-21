@@ -10,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Bước 1: Lấy mã nguồn từ kho lưu trữ GitHub xuống máy ảo Linux
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Cài đặt .NET 10 SDK
+      # Bước 2: Cài đặt môi trường .NET 10 SDK để có thể biên dịch code
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      # 2. Đóng gói ứng dụng (Đã sửa lỗi tự động tìm file .csproj bất kể vị trí thư mục)
+      # Bước 3: Tự động tìm kiếm file dự án (.csproj) và đóng gói (Publish) ứng dụng sang thư mục ./publish
       - name: Publish project
         run: |
           PROJECT_FILE=$(find . -name "*.csproj" | head -n 1)
@@ -30,13 +31,7 @@ jobs:
           echo "🚀 Tìm thấy file dự án tại: $PROJECT_FILE"
           dotnet publish "$PROJECT_FILE" -c Release -o ./publish
 
-      # 3. TẮT SERVER: Tạo và upload app_offline.htm bằng curl
-      - name: ⛔ Stop Server (Upload app_offline.htm)
-        run: |
-          echo "<html><body><h1>Updating...</h1></body></html>" > app_offline.htm
-          curl -s --ftp-pasv -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/wwwroot/app_offline.htm"
-
-      # 4. DEPLOY CODE
+      # Bước 4: Kết nối FTP và đẩy toàn bộ file đã đóng gói từ thư mục ./publish lên thư mục /wwwroot/ của hosting
       - name: 🚀 Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -48,11 +43,3 @@ jobs:
           local-dir: ./publish/
           server-dir: /wwwroot/
           security: loose
-          exclude: |
-            **/app_offline.htm
-
-      # 5. BẬT SERVER: Xóa file app_offline.htm bằng curl (Luôn chạy kể cả khi deploy lỗi)
-      - name: ▶️ Start Server (Delete app_offline.htm)
-        if: always()
-        run: |
-          curl -s --ftp-pasv -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/" -Q "-DELE /wwwroot/app_offline.htm" || true
