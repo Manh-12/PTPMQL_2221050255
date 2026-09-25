@@ -1,16 +1,18 @@
 @model PTPMQL_MVC.Models.Student
 
-<h2>Thông tin sinh viên vừa nhập</h2>
+<h2>Thông tin sinh viên</h2>
 
-<table border="1" cellpadding="10" style="border-collapse: collapse;">
+<table border="1" cellpadding="10">
     <tr>
         <th>Họ tên</th>
         <td>@Model.FullName</td>
     </tr>
+
     <tr>
         <th>Địa chỉ</th>
         <td>@Model.Address</td>
     </tr>
+
     <tr>
         <th>Trường đại học</th>
         <td>@Model.University</td>
@@ -18,6 +20,8 @@
 </table>
 
 <br />
-<a asp-controller="Student" asp-action="Create">Nhập lại (Thêm tiếp)</a> 
-| 
-<a asp-controller="Student" asp-action="Index">Xem toàn bộ danh sách</a>
+
+<a asp-controller="Student"
+   asp-action="Create">
+    Nhập lại
+</a>

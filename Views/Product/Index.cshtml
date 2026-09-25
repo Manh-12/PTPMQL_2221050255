@@ -1,17 +1,18 @@
 @model IEnumerable<PTPMQL_MVC.Models.Product>
 
 @{
-    ViewData["Title"] = "Danh mục thiết bị điện";
+    ViewData["Title"] = "Danh sách sản phẩm";
 }
 
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>@ViewBag.PageTitle</h1>
-        <a asp-action="Create" class="btn btn-primary">Thêm sản phẩm mới</a>
-    </div>
 
-    <h3>@ViewBag.WelcomeMessage</h3>
-    <p class="text-muted">Cửa hàng: @ViewData["StoreName"] | @ViewData["Contact"]</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Danh sách sản phẩm</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Thêm sản phẩm
+        </a>
+    </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
@@ -20,40 +21,87 @@
         </div>
     }
 
-    <table class="table table-bordered table-striped mt-3">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Tên sản phẩm</th>
-                <th>Giá bán</th>
-                <th>Danh mục</th>
-                <th>Chức năng</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Any())
-            {
-                <tr>
-                    <td colspan="5" class="text-center text-muted">Chưa có sản phẩm nào trong hệ thống.</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td class="fw-bold">@item.Name</td>
-                        <td>@item.Price.ToString("N0") VNĐ</td>
-                        <td>@item.Category</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Chi tiết</a> | 
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a> | 
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Mô tả</th>
+                            <th style="width: 230px;">Thao tác</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+
+                                    <td>
+                                        @item.Name
+                                    </td>
+
+                                    <td>
+                                        @item.Price.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>
+                                        @item.Quantity
+                                    </td>
+
+                                    <td>
+                                        @item.Description
+                                    </td>
+
+                                    <td>
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-info btn-sm">
+                                            Xem
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-warning btn-sm">
+                                            Sửa
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-danger btn-sm">
+                                            Xóa
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    Chưa có sản phẩm nào.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
