@@ -1,12 +1,21 @@
+
 using Microsoft.EntityFrameworkCore;
 using PTPMQL_MVC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Đăng ký SQLite database
+var connectionString = builder.Configuration
+    .GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Chưa cấu hình ConnectionStrings:DefaultConnection trong appsettings.json.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddControllersWithViews();
 
@@ -19,11 +28,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
