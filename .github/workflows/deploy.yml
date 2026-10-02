@@ -12,62 +12,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Lay ma nguon tu GitHub
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Cai dat .NET 10 SDK
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      # 3. Publish du an
+      - name: Restore dependencies
+        run: dotnet restore
+
       - name: Publish project
         shell: bash
         run: |
-          PROJECT_FILE=$(find . \
-            -name "*.csproj" \
+          PROJECT_FILE=$(find . -name "*.csproj" \
             -not -path "*/obj/*" \
-            -not -path "*/bin/*" \
-            | head -n 1)
+            -not -path "*/bin/*" | head -n 1)
 
           if [ -z "$PROJECT_FILE" ]; then
-            echo "ERROR: Khong tim thay file .csproj"
+            echo "ERROR: Cannot find .csproj"
             exit 1
           fi
 
-          echo "Project: $PROJECT_FILE"
-          dotnet restore "$PROJECT_FILE"
           dotnet publish "$PROJECT_FILE" \
             -c Release \
             --no-restore \
             -o ./publish
 
-      # 4. Kiem tra file publish
       - name: Verify published files
-        shell: bash
         run: |
-          if [ ! -f "./publish/PTPMQL_MVC.dll" ]; then
-            echo "ERROR: Khong tim thay PTPMQL_MVC.dll"
-            echo "Danh sach file publish:"
-            ls -la ./publish
-            exit 1
-          fi
+          test -f ./publish/PTPMQL_MVC.dll
+          test -f ./publish/PTPMQL_MVC.deps.json
+          test -f ./publish/PTPMQL_MVC.runtimeconfig.json
+          echo "Publish files verified."
 
-          echo "Publish thanh cong"
-          ls -la ./publish
-
-      # 5. Deploy len MonsterASP qua FTP
       - name: Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
           protocol: ftp
+          port: 21
           local-dir: ./publish/
           server-dir: /wwwroot/
           security: loose
-          dangerous-clean-slate: false
