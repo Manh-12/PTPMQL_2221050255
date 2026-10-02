@@ -1,37 +1,65 @@
+
 name: Deploy .NET 10 MVC to MonsterASP.net
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Lay ma nguon tu GitHub
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Cài đặt .NET 10 SDK
+      # 2. Cai dat .NET 10 SDK
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      # 2. Đóng gói ứng dụng sang thư mục publish
+      # 3. Publish du an
       - name: Publish project
+        shell: bash
         run: |
-          PROJECT_FILE=$(find . -name "*.csproj" | head -n 1)
+          PROJECT_FILE=$(find . \
+            -name "*.csproj" \
+            -not -path "*/obj/*" \
+            -not -path "*/bin/*" \
+            | head -n 1)
+
           if [ -z "$PROJECT_FILE" ]; then
-            echo "❌ LỖI: Không tìm thấy bất kỳ file .csproj nào trong repo!"
+            echo "ERROR: Khong tim thay file .csproj"
             exit 1
           fi
-          echo "🚀 Tìm thấy file dự án tại: $PROJECT_FILE"
-          dotnet publish "$PROJECT_FILE" -c Release -o ./publish
 
-      # 3. Deploy code sử dụng thông tin từ Secrets đã nạp đầy đủ
-      - name: 🚀 Deploy App
+          echo "Project: $PROJECT_FILE"
+          dotnet restore "$PROJECT_FILE"
+          dotnet publish "$PROJECT_FILE" \
+            -c Release \
+            --no-restore \
+            -o ./publish
+
+      # 4. Kiem tra file publish
+      - name: Verify published files
+        shell: bash
+        run: |
+          if [ ! -f "./publish/PTPMQL_MVC.dll" ]; then
+            echo "ERROR: Khong tim thay PTPMQL_MVC.dll"
+            echo "Danh sach file publish:"
+            ls -la ./publish
+            exit 1
+          fi
+
+          echo "Publish thanh cong"
+          ls -la ./publish
+
+      # 5. Deploy len MonsterASP qua FTP
+      - name: Deploy App
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -42,3 +70,4 @@ jobs:
           local-dir: ./publish/
           server-dir: /wwwroot/
           security: loose
+          dangerous-clean-slate: false
