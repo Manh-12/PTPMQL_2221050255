@@ -1,27 +1,72 @@
+
 @model PTPMQL_MVC.Models.Student
 
-<h2>Thông tin sinh viên</h2>
+@{
+    ViewData["Title"] = "Kết quả thêm sinh viên";
+}
 
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Họ tên</th>
-        <td>@Model.FullName</td>
-    </tr>
+<div class="container mt-5">
 
-    <tr>
-        <th>Địa chỉ</th>
-        <td>@Model.Address</td>
-    </tr>
+    <div class="card shadow border-0">
 
-    <tr>
-        <th>Trường đại học</th>
-        <td>@Model.University</td>
-    </tr>
-</table>
+        <div class="card-header bg-success text-white p-3">
+            <h4 class="mb-0">
+                Thêm sinh viên thành công!
+            </h4>
+        </div>
 
-<br />
+        <div class="card-body p-4">
 
-<a asp-controller="Student"
-   asp-action="Create">
-    Nhập lại
-</a>
+            <div class="alert alert-success">
+                Sinh viên đã được lưu vào hệ thống.
+            </div>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Mã sinh viên</th>
+                    <td>@Model.StudentId</td>
+                </tr>
+
+                <tr>
+                    <th>Họ và tên</th>
+                    <td>@Model.FullName</td>
+                </tr>
+
+                <tr>
+                    <th>Địa chỉ</th>
+                    <td>@Model.Address</td>
+                </tr>
+
+                <tr>
+                    <th>Năm tuyển sinh</th>
+                    <td>@Model.AdmissionYear</td>
+                </tr>
+
+                <tr>
+                    <th>Mã hệ đào tạo</th>
+                    <td>@Model.SystemCode</td>
+                </tr>
+
+                <tr>
+                    <th>Mã ngành</th>
+                    <td>@Model.MajorCode</td>
+                </tr>
+
+            </table>
+
+            <a asp-controller="Student"
+               asp-action="Index"
+               class="btn btn-primary">
+                Quay lại danh sách
+            </a>
+
+            <a asp-controller="Student"
+               asp-action="Create"
+               class="btn btn-success">
+                Thêm sinh viên khác
+            </a>
+
+        </div>
+    </div>
+</div>

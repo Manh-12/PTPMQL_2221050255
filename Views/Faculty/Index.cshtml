@@ -1,0 +1,4 @@
+@model IEnumerable<PTPMQL_MVC.Models.Faculty>
+<div class="container py-4"><h2>Danh sách khoa</h2><a asp-action="Create" class="btn btn-primary mb-3">Thêm khoa</a>
+<table class="table table-bordered"><thead><tr><th>Mã khoa</th><th>Tên khoa</th><th>Số ngành</th></tr></thead><tbody>
+@foreach(var f in Model){<tr><td>@f.FacultyId</td><td>@f.FacultyName</td><td>@f.Majors.Count</td></tr>}</tbody></table></div>

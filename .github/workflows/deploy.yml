@@ -7,47 +7,54 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: monsterasp-deploy
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./PTPMQL_MVC.csproj
+
+      - name: Build project
+        run: dotnet build ./PTPMQL_MVC.csproj --configuration Release --no-restore
 
       - name: Publish project
-        shell: bash
-        run: |
-          PROJECT_FILE=$(find . -name "*.csproj" \
-            -not -path "*/obj/*" \
-            -not -path "*/bin/*" | head -n 1)
+        run: dotnet publish ./PTPMQL_MVC.csproj --configuration Release --no-build --output ./publish
 
-          if [ -z "$PROJECT_FILE" ]; then
-            echo "ERROR: Cannot find .csproj"
-            exit 1
-          fi
-
-          dotnet publish "$PROJECT_FILE" \
-            -c Release \
-            --no-restore \
-            -o ./publish
-
-      - name: Verify published files
+      - name: Verify publish output
         run: |
           test -f ./publish/PTPMQL_MVC.dll
           test -f ./publish/PTPMQL_MVC.deps.json
           test -f ./publish/PTPMQL_MVC.runtimeconfig.json
-          echo "Publish files verified."
 
-      - name: Deploy App
+      - name: Validate FTP settings
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          test -n "$FTP_SERVER"
+          test -n "$FTP_USERNAME"
+          test -n "$FTP_PASSWORD"
+          test -n "$FTP_SERVER_DIR"
+
+      - name: Deploy to MonsterASP.net
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -56,5 +63,5 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./publish/
-          server-dir: /wwwroot/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
           security: loose

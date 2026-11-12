@@ -139,7 +139,6 @@ C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\scopedcss\projectbundle\PTPMQL_MVC.bundle.scp.css
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\6my0quup7u-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\o3s4fr5t60-{0}-61n19gt1b8-61n19gt1b8.gz
-C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\y0d5wfw17e-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\xokkk6zrxq-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\z5100l0pge-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\rjr0wajle7-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -212,3 +211,4 @@ C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\PTPMQL_MVC.pdb
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\PTPMQL_MVC.genruntimeconfig.cache
 C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\ref\PTPMQL_MVC.dll
+C:\Users\ptien\OneDrive\Đính kèm\PTPMQL_2221050255\PTPMQL_MVC\obj\Debug\net10.0\compressed\y0d5wfw17e-{0}-h3qppj1n43-h3qppj1n43.gz
